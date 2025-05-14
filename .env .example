@@ -1,0 +1,2 @@
+MONGO_URI=mongodb+srv://your_user:your_pass@cluster.mongodb.net/your-db-name
+PORT=5000
