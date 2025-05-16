@@ -176,6 +176,36 @@ exports.getWalletSummary = async (req, res) => {
 	}
 };
 
+// GET all wallet summary of transactions
+exports.getAllWalletSummary = async (req, res) => {
+	try {
+		const income = await Transaction.aggregate([
+			{
+				$match: {
+					type: "income",
+				},
+			},
+			{ $group: { _id: null, total: { $sum: "$amount" } } },
+		]);
+
+		const expense = await Transaction.aggregate([
+			{
+				$match: {
+					type: "expense",
+				},
+			},
+			{ $group: { _id: null, total: { $sum: "$amount" } } },
+		]);
+
+		res.json({
+			income: income[0]?.total || 0,
+			expense: expense[0]?.total || 0,
+		});
+	} catch (err) {
+		res.status(500).json({ error: "Gagal mengambil rekap transaksi" });
+	}
+};
+
 // POST new transaction
 exports.addTransaction = async (req, res) => {
 	const { walletId, amount, type, category, note, date } = req.body;

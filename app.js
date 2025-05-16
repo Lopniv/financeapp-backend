@@ -7,7 +7,12 @@ const walletRoutes = require("./routes/walletRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 
 const app = express();
-app.use(cors());
+const allowedOrigins = ["http://localhost:5173"]; // tambahkan domain frontend
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
 app.use(express.json());
 
 app.use("/api/wallets", walletRoutes);
